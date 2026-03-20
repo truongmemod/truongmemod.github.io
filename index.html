@@ -118,14 +118,19 @@ body {
 <body>
 
 <!-- 🎵 NHẠC -->
-<audio id="music" autoplay loop>
-  <source src="https://files.catbox.moe/c3eohl.mp3" type="audio/mpeg">
-</audio>
+<audio id="music" autoplay></audio>
 
-<!-- nút nhạc -->
-<button onclick="toggleMusic()" style="position:fixed;bottom:15px;right:15px;padding:10px;border-radius:10px;border:none;">
-  🔊
+<button onclick="toggleMusic()" 
+style="position:fixed;bottom:15px;right:15px;padding:10px;border-radius:10px;border:none;">
+🔊
 </button>
+
+<script>
+const playlist = [
+  "https://files.catbox.moe/c3eohl.mp3",
+  "https://files.catbox.moe/0qymfn.mp3",
+  "https://files.catbox.moe/d7xy88.mp3"
+];
 
 <!-- dark mode -->
 <button class="toggle" onclick="toggleMode()">🌙</button>
@@ -152,21 +157,35 @@ body {
 function toggleMode() {
   document.body.classList.toggle("light");
 }
+let index = 0;
+let music = document.getElementById("music");
 
+// phát bài đầu
+music.src = playlist[index];
+
+// khi hết bài → sang bài tiếp
+music.addEventListener("ended", () => {
+  index++;
+  if (index >= playlist.length) index = 0; // lặp lại từ đầu
+  music.src = playlist[index];
+  music.play();
+});
+
+// bật/tắt nhạc
 function toggleMusic() {
-  let m = document.getElementById("music");
-  if (m.paused) {
-    m.play();
+  if (music.paused) {
+    music.play();
   } else {
-    m.pause();
+    music.pause();
   }
 }
 
-/* fix autoplay */
+// fix autoplay
 window.addEventListener("click", () => {
-  document.getElementById("music").play();
+  music.play();
 }, { once: true });
 </script>
+
 
 </body>
 </html>
