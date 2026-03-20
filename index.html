@@ -38,7 +38,7 @@ body {
   margin-bottom: 10px;
 }
 
-/* button dark mode */
+/* toggle */
 .toggle {
   position: fixed;
   top: 15px;
@@ -48,7 +48,6 @@ body {
   border: none;
   padding: 10px;
   border-radius: 10px;
-  transition: 0.3s;
 }
 
 /* list */
@@ -75,7 +74,6 @@ body {
   animation: fadeIn 0.5s forwards;
 }
 
-/* delay từng item */
 .links a:nth-child(1){animation-delay:0.1s;}
 .links a:nth-child(2){animation-delay:0.2s;}
 .links a:nth-child(3){animation-delay:0.3s;}
@@ -91,24 +89,28 @@ body {
   transform: scale(0.95);
 }
 
-/* animation */
 @keyframes fadeIn {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-
-/* scroll mượt */
-html {
-  scroll-behavior: smooth;
-}
 </style>
 </head>
 
 <body>
 
-<!-- nút dark mode -->
+<!-- 🎵 NHẠC -->
+<audio id="music" autoplay loop>
+  <source src="https://files.catbox.moe/0qymfn.mp3" type="audio/mpeg">
+</audio>
+
+<!-- nút bật/tắt nhạc -->
+<button onclick="toggleMusic()" style="position:fixed;bottom:15px;right:15px;padding:10px;border-radius:10px;border:none;">
+  🔊
+</button>
+
+<!-- dark mode -->
 <button class="toggle" onclick="toggleMode()">🌙</button>
 
 <!-- avatar -->
@@ -117,18 +119,31 @@ html {
   <h2>Nhut Nguyen</h2>
 </div>
 
-<!-- list link -->
+<!-- link -->
 <div class="links">
-  <a href="https://facebook.com" target="_blank">Facebook</a>
-  <a href="https://github.com" target="_blank">GitHub</a>
-  <a href="https://youtube.com" target="_blank">YouTube</a>
-  <a href="#">Link khác</a>
+  <a href="https://facebook.com">Facebook</a>
+  <a href="https://github.com">GitHub</a>
+  <a href="https://youtube.com">YouTube</a>
 </div>
 
 <script>
 function toggleMode() {
   document.body.classList.toggle("light");
 }
+
+function toggleMusic() {
+  let m = document.getElementById("music");
+  if (m.paused) {
+    m.play();
+  } else {
+    m.pause();
+  }
+}
+
+/* fix autoplay (trình duyệt chặn) */
+window.addEventListener("click", () => {
+  document.getElementById("music").play();
+}, { once: true });
 </script>
 
 </body>
