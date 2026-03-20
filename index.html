@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bio của tôi</title>
+<title>Nguyễn Trường</title>
 
 <style>
 :root {
@@ -33,9 +33,27 @@ body {
 }
 
 .header img {
-  width: 90px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;        /* FIX méo ảnh */
   border-radius: 50%;
-  margin-bottom: 10px;
+  display: block;
+  margin: 0 auto;
+  border: 3px solid #4f46e5;
+  box-shadow: 0 0 15px rgba(79,70,229,0.5);
+  transition: 0.3s;
+}
+
+.header img:hover {
+  transform: scale(1.05);
+}
+
+/* mobile */
+@media (max-width: 600px) {
+  .header img {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 /* toggle */
@@ -77,7 +95,6 @@ body {
 .links a:nth-child(1){animation-delay:0.1s;}
 .links a:nth-child(2){animation-delay:0.2s;}
 .links a:nth-child(3){animation-delay:0.3s;}
-.links a:nth-child(4){animation-delay:0.4s;}
 
 .links a:hover {
   transform: scale(1.05);
@@ -105,7 +122,7 @@ body {
   <source src="https://files.catbox.moe/c3eohl.mp3" type="audio/mpeg">
 </audio>
 
-<!-- nút bật/tắt nhạc -->
+<!-- nút nhạc -->
 <button onclick="toggleMusic()" style="position:fixed;bottom:15px;right:15px;padding:10px;border-radius:10px;border:none;">
   🔊
 </button>
@@ -116,7 +133,7 @@ body {
 <!-- avatar -->
 <div class="header">
   <img src="https://sf-static.upanhlaylink.com/img/image_202603204b49cd5c7a97617e1a27ddec1c873533.jpg">
-  <h2>Fb:Nguyễn Trường</h2>
+  <h2>Fb: Nguyễn Trường</h2>
 </div>
 
 <!-- link -->
@@ -140,7 +157,7 @@ function toggleMusic() {
   }
 }
 
-/* fix autoplay (trình duyệt chặn) */
+/* fix autoplay */
 window.addEventListener("click", () => {
   document.getElementById("music").play();
 }, { once: true });
