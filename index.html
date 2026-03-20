@@ -1,38 +1,135 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Bio của tôi</title>
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      background: #111;
-      color: white;
-      padding: 40px;
-    }
-    img {
-      width: 120px;
-      border-radius: 50%;
-    }
-    a {
-      display: block;
-      margin: 10px;
-      padding: 12px;
-      background: #1db954;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-    }
-  </style>
-</head>
-<body>
-  <img src="avatar.jpg" alt="avatar">
-  <h1>Nhut Nguyen</h1>
-  <p>Developer | Freelancer</p>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bio của tôi</title>
 
-  <a href="https://facebook.com">Facebook</a>
-  <a href="https://github.com">GitHub</a>
-  <a href="https://youtube.com">YouTube</a>
+<style>
+:root {
+  --bg: #0f0f0f;
+  --text: #ffffff;
+  --card: #1a1a1a;
+}
+
+.light {
+  --bg: #f5f5f5;
+  --text: #111;
+  --card: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: Arial;
+  background: var(--bg);
+  color: var(--text);
+  transition: 0.3s;
+}
+
+/* avatar */
+.header {
+  text-align: center;
+  padding: 30px 20px 10px;
+}
+
+.header img {
+  width: 90px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* button dark mode */
+.toggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  background: var(--card);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+/* list */
+.links {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+}
+
+.links a {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--card);
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: bold;
+
+  transition: 0.25s;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+/* delay từng item */
+.links a:nth-child(1){animation-delay:0.1s;}
+.links a:nth-child(2){animation-delay:0.2s;}
+.links a:nth-child(3){animation-delay:0.3s;}
+.links a:nth-child(4){animation-delay:0.4s;}
+
+.links a:hover {
+  transform: scale(1.05);
+  background: #4f46e5;
+  color: white;
+}
+
+.links a:active {
+  transform: scale(0.95);
+}
+
+/* animation */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* scroll mượt */
+html {
+  scroll-behavior: smooth;
+}
+</style>
+</head>
+
+<body>
+
+<!-- nút dark mode -->
+<button class="toggle" onclick="toggleMode()">🌙</button>
+
+<!-- avatar -->
+<div class="header">
+  <img src="https://i.imgur.com/your-avatar.png">
+  <h2>Nhut Nguyen</h2>
+</div>
+
+<!-- list link -->
+<div class="links">
+  <a href="https://facebook.com" target="_blank">Facebook</a>
+  <a href="https://github.com" target="_blank">GitHub</a>
+  <a href="https://youtube.com" target="_blank">YouTube</a>
+  <a href="#">Link khác</a>
+</div>
+
+<script>
+function toggleMode() {
+  document.body.classList.toggle("light");
+}
+</script>
+
 </body>
 </html>
