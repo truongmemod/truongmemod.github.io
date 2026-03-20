@@ -26,7 +26,6 @@ body {
   transition: 0.3s;
 }
 
-/* avatar */
 .header {
   text-align: center;
   padding: 30px 20px 10px;
@@ -35,20 +34,14 @@ body {
 .header img {
   width: 100px;
   height: 100px;
-  object-fit: cover;        /* FIX méo ảnh */
+  object-fit: cover;
   border-radius: 50%;
+  margin: auto;
   display: block;
-  margin: 0 auto;
   border: 3px solid #4f46e5;
   box-shadow: 0 0 15px rgba(79,70,229,0.5);
-  transition: 0.3s;
 }
 
-.header img:hover {
-  transform: scale(1.05);
-}
-
-/* mobile */
 @media (max-width: 600px) {
   .header img {
     width: 80px;
@@ -56,19 +49,15 @@ body {
   }
 }
 
-/* toggle */
 .toggle {
   position: fixed;
   top: 15px;
   right: 15px;
-  cursor: pointer;
-  background: var(--card);
   border: none;
   padding: 10px;
   border-radius: 10px;
 }
 
-/* list */
 .links {
   max-width: 400px;
   margin: auto;
@@ -85,32 +74,13 @@ body {
   border-radius: 12px;
   text-align: center;
   font-weight: bold;
-
   transition: 0.25s;
-  transform: translateY(20px);
-  opacity: 0;
-  animation: fadeIn 0.5s forwards;
 }
-
-.links a:nth-child(1){animation-delay:0.1s;}
-.links a:nth-child(2){animation-delay:0.2s;}
-.links a:nth-child(3){animation-delay:0.3s;}
 
 .links a:hover {
   transform: scale(1.05);
   background: #4f46e5;
   color: white;
-}
-
-.links a:active {
-  transform: scale(0.95);
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 </style>
 </head>
@@ -120,19 +90,8 @@ body {
 <!-- 🎵 NHẠC -->
 <audio id="music" autoplay></audio>
 
-<button onclick="toggleMusic()" 
-style="position:fixed;bottom:15px;right:15px;padding:10px;border-radius:10px;border:none;">
-🔊
-</button>
-
-<script>
-const playlist = [
-  "https://files.catbox.moe/c3eohl.mp3",
-  "https://files.catbox.moe/0qymfn.mp3",
-  "https://files.catbox.moe/d7xy88.mp3"
-];
-
-<!-- dark mode -->
+<!-- nút -->
+<button onclick="toggleMusic()" style="position:fixed;bottom:15px;right:15px;">🔊</button>
 <button class="toggle" onclick="toggleMode()">🌙</button>
 
 <!-- avatar -->
@@ -154,30 +113,34 @@ const playlist = [
 </div>
 
 <script>
-function toggleMode() {
-  document.body.classList.toggle("light");
-}
+const playlist = [
+  "https://files.catbox.moe/c3eohl.mp3",
+  "https://files.catbox.moe/0qymfn.mp3",
+  "https://files.catbox.moe/d7xy88.mp3"
+];
+
 let index = 0;
 let music = document.getElementById("music");
 
 // phát bài đầu
 music.src = playlist[index];
 
-// khi hết bài → sang bài tiếp
+// auto next
 music.addEventListener("ended", () => {
-  index++;
-  if (index >= playlist.length) index = 0; // lặp lại từ đầu
+  index = (index + 1) % playlist.length;
   music.src = playlist[index];
   music.play();
 });
 
-// bật/tắt nhạc
+// toggle nhạc
 function toggleMusic() {
-  if (music.paused) {
-    music.play();
-  } else {
-    music.pause();
-  }
+  if (music.paused) music.play();
+  else music.pause();
+}
+
+// dark mode
+function toggleMode() {
+  document.body.classList.toggle("light");
 }
 
 // fix autoplay
@@ -185,7 +148,6 @@ window.addEventListener("click", () => {
   music.play();
 }, { once: true });
 </script>
-
 
 </body>
 </html>
