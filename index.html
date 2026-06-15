@@ -1,153 +1,121 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nguyễn Trường</title>
+    <meta charset="UTF-8">
+    <title>Đăng nhập - Quản lý dược phẩm</title>
 
-<style>
-:root {
-  --bg: #0f0f0f;
-  --text: #ffffff;
-  --card: #1a1a1a;
-}
+    <style>
+        body {
+            background: #f2f2f2;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-.light {
-  --bg: #f5f5f5;
-  --text: #111;
-  --card: #ffffff;
-}
+        .login-container {
+            background: #f5e85c;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 260px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
 
-body {
-  margin: 0;
-  font-family: Arial;
-  background: var(--bg);
-  color: var(--text);
-  transition: 0.3s;
-}
+        .logo {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
 
-.header {
-  text-align: center;
-  padding: 30px 20px 10px;
-}
+        h2 {
+            margin: 10px 0 20px;
+        }
 
-.header img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin: auto;
-  display: block;
-  border: 3px solid #4f46e5;
-  box-shadow: 0 0 15px rgba(79,70,229,0.5);
-}
+        .pin-display {
+            font-size: 24px;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+        }
 
-@media (max-width: 600px) {
-  .header img {
-    width: 80px;
-    height: 80px;
-  }
-}
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
 
-.toggle {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  border: none;
-  padding: 10px;
-  border-radius: 10px;
-}
+        .keypad button {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            background: #ddd;
+            cursor: pointer;
+        }
 
-.links {
-  max-width: 400px;
-  margin: auto;
-  padding: 20px;
-}
+        .keypad button:hover {
+            background: #ccc;
+        }
 
-.links a {
-  display: block;
-  text-decoration: none;
-  color: var(--text);
-  background: var(--card);
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 12px;
-  text-align: center;
-  font-weight: bold;
-  transition: 0.25s;
-}
+        .clear {
+            background: #ff8c8c;
+        }
 
-.links a:hover {
-  transform: scale(1.05);
-  background: #4f46e5;
-  color: white;
-}
-</style>
+        .enter {
+            background: #90ee90;
+        }
+
+        .login-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #5aa7d8;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #3d8fc1;
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- 🎵 NHẠC -->
-<audio id="music" autoplay></audio>
+<div class="login-container">
+    
+    <div class="logo">💊</div>
 
-<!-- nút -->
-<button onclick="toggleMusic()" style="position:fixed;bottom:15px;right:15px;">🔊</button>
-<button class="toggle" onclick="toggleMode()">🌙</button>
+    <h2>Quản lý dược phẩm</h2>
 
-<!-- avatar -->
-<div class="header">
-  <img src="https://sf-static.upanhlaylink.com/img/image_202603204b49cd5c7a97617e1a27ddec1c873533.jpg">
-  <h2>Fb: Nguyễn Trường</h2>
+    <div class="pin-display">
+        ● ● ● ●
+    </div>
+
+    <div class="keypad">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+
+        <button class="clear">⌫</button>
+        <button>0</button>
+        <button class="enter">✔</button>
+    </div>
+
+    <button class="login-btn">Đăng nhập</button>
+
 </div>
-
-<!-- link -->
-<div class="links">
-  <a href="https://www.mediafire.com/file/fzlagddlamjm1w8/YouTube+++.ipa/file">(iOS) IPA Youtube Premium iOS 14-26</a>
-  <a href="https://www.mediafire.com/file/zddmcc7097zytu6/BHTikTokPlus_31.5.0_2.3.ipa/file">(iOS) IPA TikTok Plus</a>
-  <a href="https://www.mediafire.com/file/r0siu8ftrbs4rt8/CapCut.ipa/file">(iOS) IPA CapCut Pro</a>
-  <a href="">(iOS) IPA Cho iOS Cổ</a>
-  
-  <a href="https://vanced.to">(Android) Youtube Premium Android 5-16</a>
-  <a href="">(Android) Apk Cho Android Thấp</a>
-  <a href="https://www.facebook.com/nguyen.truong.448427">Mọi Thắc Mắc Liên Hệ Qua Fb</a>
-</div>
-
-<script>
-const playlist = [
-  "https://files.catbox.moe/c3eohl.mp3",
-  "https://files.catbox.moe/0qymfn.mp3",
-  "https://files.catbox.moe/d7xy88.mp3"
-];
-
-let index = 0;
-let music = document.getElementById("music");
-
-// phát bài đầu
-music.src = playlist[index];
-
-// auto next
-music.addEventListener("ended", () => {
-  index = (index + 1) % playlist.length;
-  music.src = playlist[index];
-  music.play();
-});
-
-// toggle nhạc
-function toggleMusic() {
-  if (music.paused) music.play();
-  else music.pause();
-}
-
-// dark mode
-function toggleMode() {
-  document.body.classList.toggle("light");
-}
-
-// fix autoplay
-window.addEventListener("click", () => {
-  music.play();
-}, { once: true });
-</script>
 
 </body>
 </html>
