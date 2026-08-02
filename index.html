@@ -1,452 +1,546 @@
 <!DOCTYPE html>
+<!--
+  ============================================================================
+  NT MOBA — BIO LINK PAGE (1 file duy nhất: HTML + CSS + JS)
+  ----------------------------------------------------------------------------
+  - Không phụ thuộc app.js / style.css ngoài -> chỉ cần copy file này lên
+    GitHub Pages (đặt tên index.html) là chạy được ngay.
+  - Chỉ dùng CDN ngoài cho: Google Fonts + Bootstrap Icons (bắt buộc phải có
+    mạng mới hiện icon/font đẹp, nhưng trang vẫn chạy nếu mất mạng, chỉ xấu
+    hơn 1 chút do dùng font hệ thống thay thế).
+  - Cấu trúc chia rõ từng khối bằng comment để bạn dễ tìm và tự thêm sau này.
+  ============================================================================
+-->
 <html lang="vi" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no" />
-  <!-- ĐÃ ĐỔI: tiêu đề tab trình duyệt -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>NT MOBA</title>
+  <meta name="description" content="NT MOBA - Trang liên kết chính thức" />
+
+  <!-- Favicon: đổi link ảnh bên dưới thành logo thật của bạn -->
   <link rel="icon" href="https://i.imgur.com/zRHnA52.jpeg" type="image/jpeg" />
 
-  <!-- Fonts: Be Vietnam Pro hỗ trợ đầy đủ tiếng Việt + English -->
+  <!-- Font chữ (hỗ trợ tiếng Việt đầy đủ) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Icons & Libs -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js"></script>
+  <!-- Bộ icon (youtube, telegram, mặt trời/mặt trăng, loa nhạc...) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- File CSS gốc của template (chứa toàn bộ style cho hero, section, modal...) -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- =====================================================================
-       CSS RIÊNG THÊM MỚI (không đụng vào style.css gốc để tránh xung đột)
-       Gồm:
-       1) Ẩn các khối bị loại bỏ theo yêu cầu (menu bên cạnh, chatbot)
-          -> Dùng display:none thay vì xoá hẳn thẻ để không làm app.js
-             báo lỗi (nếu app.js có gọi getElementById tới các id này).
-       2) Style cho 3 nút mạng xã hội tròn (YouTube / Zalo / Telegram)
-  ===================================================================== -->
+  <!-- ========================================================================
+       CSS — TOÀN BỘ STYLE CỦA TRANG
+       Biến màu (CSS variables) đặt ở :root và [data-theme="light"] để
+       đổi Dark/Light Mode chỉ bằng cách đổi 1 thuộc tính data-theme trên <html>.
+  ======================================================================== -->
   <style>
-    /* ---- 1) ẨN MENU BÊN CẠNH + NÚT MỞ MENU + LỚP PHỦ MENU ---- */
-    #menuToggle,
-    #menuOverlay,
-    #sideNav { display: none !important; }
+    /* ---------- 1. BIẾN MÀU (THEME) ---------- */
+    :root{
+      --bg:#0b0d14;
+      --bg-soft:#12151f;
+      --card:#181c28;
+      --card-hover:#20263578;
+      --text:#f3f4f8;
+      --text-dim:#9aa0b4;
+      --border:#2a2f40;
+      --accent:#7c5cff;
+      --accent-2:#00d4ff;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    html[data-theme="light"]{
+      --bg:#f5f6fb;
+      --bg-soft:#ffffff;
+      --card:#ffffff;
+      --card-hover:#eef0fb;
+      --text:#161824;
+      --text-dim:#666c85;
+      --border:#e4e6f2;
+      --accent:#6d4cff;
+      --accent-2:#0aa8c9;
+      --shadow: 0 10px 26px rgba(20,20,60,.10);
+    }
 
-    /* ---- 1b) ẨN WIDGET CHATBOT (nút chat nổi + khung chat) ---- */
-    #chatFab,
-    #chatWidget { display: none !important; }
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Be Vietnam Pro', system-ui, sans-serif;
+      min-height:100vh;
+      overflow-x:hidden;
+      transition:background .35s ease, color .35s ease;
+    }
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; display:block; }
 
-    /* =====================================================================
-       2) KHU 3 NÚT MẠNG XÃ HỘI (YouTube / Zalo / Telegram)
-       Đặt ngay phía trên section "Tải Game" (id="games")
-    ===================================================================== */
-    .social-orbit-section{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:14px;
-      padding:32px 16px 8px;
+    /* Khi trang đang load splash -> khoá cuộn để không giật layout */
+    body.loading{ overflow:hidden; height:100vh; }
+
+    /* ========================================================================
+       2. SPLASH SCREEN — hiệu ứng khởi động khi mới vào web
+    ======================================================================== */
+    #splash{
+      position:fixed; inset:0; z-index:9999;
+      display:flex; align-items:center; justify-content:center;
+      background:radial-gradient(circle at 50% 40%, var(--bg-soft), var(--bg) 70%);
+      transition:opacity .5s ease, visibility .5s ease;
+    }
+    #splash.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+    .splash-inner{ text-align:center; }
+    .splash-logo-wrap{
+      position:relative; width:96px; height:96px; margin:0 auto 20px;
+    }
+    .splash-logo-wrap img{
+      width:100%; height:100%; border-radius:50%; object-fit:cover;
+      border:2px solid var(--border);
+      animation: splashFloat 2.2s ease-in-out infinite;
+    }
+    .splash-ring{
+      position:absolute; inset:-10px; border-radius:50%;
+      border:3px solid transparent;
+      border-top-color:var(--accent);
+      border-right-color:var(--accent-2);
+      animation: spin 1s linear infinite;
+    }
+    .splash-title{
+      font-family:'Nunito', sans-serif; font-weight:800;
+      font-size:22px; letter-spacing:1px; margin:0 0 6px;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .splash-sub{ color:var(--text-dim); font-size:13px; margin:0; }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+    @keyframes splashFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
+
+    /* ========================================================================
+       3. GÓC TRÁI: đồng hồ thời gian thực + nút sáng/tối
+    ======================================================================== */
+    .top-left-widget{
+      position:fixed; top:16px; left:16px; z-index:500;
+      display:flex; align-items:center; gap:8px;
+      background:var(--card);
+      border:1px solid var(--border);
+      padding:8px 10px 8px 16px;
+      border-radius:999px;
+      box-shadow:var(--shadow);
+    }
+    .clock-time{
+      font-family:'Nunito',sans-serif; font-weight:700; font-size:14px;
+      letter-spacing:.5px; min-width:56px;
+    }
+    .theme-btn{
+      width:32px; height:32px; border-radius:50%; border:none; cursor:pointer;
+      background:var(--bg-soft); color:var(--text);
+      display:flex; align-items:center; justify-content:center;
+      font-size:15px; transition:transform .2s ease, background .2s ease;
+    }
+    .theme-btn:hover{ transform:scale(1.08); }
+    .theme-btn:active{ transform:scale(.92); }
+
+    /* ========================================================================
+       4. GÓC PHẢI: nút bật/tắt nhạc nền
+    ======================================================================== */
+    .music-btn{
+      position:fixed; top:16px; right:16px; z-index:500;
+      width:44px; height:44px; border-radius:50%; border:none; cursor:pointer;
+      background:var(--card); color:var(--text);
+      border:1px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      font-size:17px; box-shadow:var(--shadow);
+      transition:transform .2s ease;
+    }
+    .music-btn:hover{ transform:scale(1.08); }
+    .music-btn:active{ transform:scale(.9); }
+    .music-btn.playing{ color:#fff; background:linear-gradient(135deg,var(--accent),var(--accent-2)); border-color:transparent; }
+    .music-btn.playing i{ animation: musicBeat 1s ease-in-out infinite; }
+    @keyframes musicBeat{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.18); } }
+
+    /* ========================================================================
+       5. HERO: logo + tên NT MOBA
+    ======================================================================== */
+    .hero{
+      padding:96px 20px 24px;
       text-align:center;
+      max-width:560px; margin:0 auto;
     }
-    .social-orbit-title{
-      font-family:'Nunito',sans-serif;
-      font-weight:700;
-      font-size:14px;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-      opacity:.7;
-      margin:0 0 4px;
+    .hero-logo-wrap{
+      position:relative; width:104px; height:104px; margin:0 auto 18px;
     }
-    .social-orbit-row{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:28px;
-      flex-wrap:wrap;
+    .hero-logo-glow{
+      position:absolute; inset:-14px; border-radius:50%; z-index:0;
+      background:conic-gradient(from 0deg, var(--accent), var(--accent-2), var(--accent));
+      filter:blur(18px); opacity:.55;
+      animation: rotateGlow 6s linear infinite;
     }
-    .social-orbit-item{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:8px;
-      text-decoration:none;
-      color:inherit;
+    @keyframes rotateGlow{ to{ transform:rotate(360deg); } }
+    .hero-logo{
+      position:relative; z-index:1;
+      width:100%; height:100%; border-radius:50%; object-fit:cover;
+      border:3px solid var(--bg);
     }
-    .social-orbit-avatar{
+    .hero-name{
+      font-family:'Nunito',sans-serif; font-weight:800;
+      font-size:30px; margin:6px 0 4px; letter-spacing:.5px;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .hero-name .verify{ width:22px; height:22px; }
+    .hero-tagline{
+      color:var(--text-dim); font-size:14.5px; margin:0 0 4px;
+    }
+
+    /* ========================================================================
+       6. 3 NÚT MẠNG XÃ HỘI — hiệu ứng động nổi bật
+    ======================================================================== */
+    .social-row{
+      display:flex; align-items:center; justify-content:center;
+      gap:26px; margin-top:22px; flex-wrap:wrap;
+    }
+    .social-item{
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      opacity:0; transform:translateY(14px) scale(.9);
+      animation: socialIn .55s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .social-item:nth-child(1){ animation-delay:.15s; }
+    .social-item:nth-child(2){ animation-delay:.30s; }
+    .social-item:nth-child(3){ animation-delay:.45s; }
+    @keyframes socialIn{ to{ opacity:1; transform:translateY(0) scale(1); } }
+
+    .social-avatar{
       position:relative;
-      width:64px;
-      height:64px;
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:26px;
-      color:#fff;
-      box-shadow:0 6px 18px rgba(0,0,0,.25);
+      width:60px; height:60px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:24px; color:#fff;
+      box-shadow:0 8px 20px rgba(0,0,0,.28);
       transition:transform .25s ease, box-shadow .25s ease;
     }
-    /* Vòng sáng nhấp nháy phía sau avatar -> hiệu ứng động */
-    .social-orbit-avatar::before{
-      content:"";
-      position:absolute;
-      inset:-6px;
-      border-radius:50%;
-      border:2px solid currentColor;
-      opacity:.55;
-      animation: orbitPulse 2.2s ease-out infinite;
+    .social-item:hover .social-avatar{ transform:translateY(-5px) scale(1.08); }
+    .social-item:active .social-avatar{ transform:scale(.94); }
+    .social-avatar::before{
+      content:""; position:absolute; inset:-6px; border-radius:50%;
+      border:2px solid currentColor; opacity:.55;
+      animation: pulseRing 2.1s ease-out infinite;
     }
-    .social-orbit-item:hover .social-orbit-avatar{
-      transform:translateY(-4px) scale(1.06);
-      box-shadow:0 10px 22px rgba(0,0,0,.32);
+    .social-avatar.yt{ background:#ff0000; color:#ff0000; }
+    .social-avatar.zalo{ background:#0068ff; color:#0068ff; }
+    .social-avatar.tg{ background:#26a5e4; color:#26a5e4; }
+    .social-avatar i{ color:#fff; position:relative; z-index:1; }
+    @keyframes pulseRing{
+      0%{ transform:scale(.85); opacity:.6; }
+      70%,100%{ transform:scale(1.4); opacity:0; }
     }
-    .social-orbit-label{
-      font-size:12.5px;
-      font-weight:600;
-      opacity:.85;
-    }
-    /* Màu riêng cho từng nền tảng */
-    .social-orbit-avatar.yt   { background:#ff0000; color:#ff0000; }
-    .social-orbit-avatar.zalo { background:#0068ff; color:#0068ff; }
-    .social-orbit-avatar.tg   { background:#26a5e4; color:#26a5e4; }
-    /* icon bên trong luôn màu trắng, chỉ dùng currentColor cho vòng pulse */
-    .social-orbit-avatar i,
-    .social-orbit-avatar svg { color:#fff; fill:#fff; }
+    .social-label{ font-size:12.5px; font-weight:600; color:var(--text-dim); }
 
-    @keyframes orbitPulse{
-      0%   { transform:scale(.85); opacity:.6; }
-      70%  { transform:scale(1.35); opacity:0; }
-      100% { transform:scale(1.35); opacity:0; }
+    /* ========================================================================
+       7. DANH MỤC ĐIỀU HƯỚNG (bấm vào -> chuyển hướng)
+       Bạn tự thêm thẻ <a class="nav-card"> mới theo mẫu có sẵn.
+    ======================================================================== */
+    .nav-section{ max-width:560px; margin:34px auto 0; padding:0 20px 60px; }
+    .nav-grid{ display:grid; grid-template-columns:1fr; gap:12px; }
+    .nav-card{
+      display:flex; align-items:center; gap:14px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:14px 16px;
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .nav-card:hover{
+      transform:translateY(-4px);
+      box-shadow:var(--shadow);
+      background:var(--card-hover);
+    }
+    .nav-card:active{ transform:translateY(-1px) scale(.99); }
+    .nav-icon{
+      width:42px; height:42px; border-radius:12px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px; color:#fff;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    }
+    .nav-text{ flex:1; min-width:0; }
+    .nav-title{ font-weight:700; font-size:15px; margin:0 0 2px; }
+    .nav-sub{ font-size:12.5px; color:var(--text-dim); margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .nav-arrow{ color:var(--text-dim); font-size:16px; transition:transform .18s ease; }
+    .nav-card:hover .nav-arrow{ transform:translateX(4px); color:var(--accent); }
+
+    /* ========================================================================
+       8. FOOTER
+    ======================================================================== */
+    .footer{ text-align:center; padding:0 20px 40px; color:var(--text-dim); font-size:12.5px; }
+    .footer strong{ color:var(--text); }
+
+    /* Responsive nhỏ gọn cho màn hình rất nhỏ */
+    @media (max-width:360px){
+      .social-row{ gap:16px; }
+      .top-left-widget{ padding:6px 8px 6px 12px; }
     }
   </style>
 </head>
-
 <body class="loading">
 
-  <!-- ===== CLOCK WIDGET (đồng hồ góc trái) ===== -->
-  <div id="clockWidget" class="clock-widget">
-    <div class="clock-greeting" id="clockGreeting"></div>
-    <div class="clock-time" id="clockTime"></div>
-    <div class="clock-period-icon" id="clockIcon"></div>
-  </div>
-
-  <!-- ===== INTRO SPLASH (màn hình chờ lúc mới load trang) ===== -->
-  <div id="introSplash">
+  <!-- ========================================================================
+       SPLASH SCREEN — hiện khi vừa load trang, tự ẩn sau khi trang sẵn sàng
+  ======================================================================== -->
+  <div id="splash">
     <div class="splash-inner">
-      <div class="splash-ring"></div>
-      <img src="https://cdn.tumadam.com/files/e8dca0d5-42f5-4d1c-9a5a-c1cad7e5b158.jpeg" class="splash-avatar" alt="Avatar">
-      <!-- ĐÃ ĐỔI: tên hiển thị lúc loading -->
-      <h1 class="splash-title">NT MOBA</h1>
+      <div class="splash-logo-wrap">
+        <div class="splash-ring"></div>
+        <img src="https://cdn.tumadam.com/files/e8dca0d5-42f5-4d1c-9a5a-c1cad7e5b158.jpeg" alt="NT MOBA">
+      </div>
+      <p class="splash-title">NT MOBA</p>
       <p class="splash-sub">Đang khởi động...</p>
-      <div class="splash-loader"><span></span></div>
     </div>
   </div>
 
-  <!-- ===== IMAGE PREVIEW MODAL (xem ảnh preview game) - giữ nguyên vì app.js dùng ===== -->
-  <div id="imgPreviewModal">
-    <div class="img-preview-box">
-      <div class="img-preview-header">
-        <div class="img-preview-title" id="previewTitle">Preview</div>
-        <button class="img-preview-close" id="previewClose"><i class="bi bi-x-lg"></i></button>
-      </div>
-      <div class="img-preview-slider">
-        <button class="img-nav-btn prev" id="previewPrev"><i class="bi bi-chevron-left"></i></button>
-        <div class="img-preview-track" id="previewTrack"></div>
-        <button class="img-nav-btn next" id="previewNext"><i class="bi bi-chevron-right"></i></button>
-        <div class="img-counter" id="previewCounter">1 / 1</div>
-      </div>
-      <div class="img-preview-dots" id="previewDots"></div>
-      <div class="img-preview-desc" id="previewDesc"></div>
-    </div>
+  <!-- ========================================================================
+       GÓC TRÁI: đồng hồ thực + nút Sáng/Tối
+  ======================================================================== -->
+  <div class="top-left-widget">
+    <span class="clock-time" id="clockTime">--:--:--</span>
+    <button class="theme-btn" id="themeToggle" aria-label="Đổi giao diện sáng/tối" title="Đổi giao diện">
+      <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+    </button>
   </div>
 
-  <!-- ===== POPUP CHỌN BẢN ANDROID (32-bit / 64-bit) - giữ nguyên, app.js điều khiển ===== -->
-  <div id="androidArch" class="modal-overlay">
-    <div class="modal-box">
-      <div class="modal-icon android-icon"><i class="bi bi-android2"></i></div>
-      <h3>Tải App Android</h3>
-      <p>Hiện tại chỉ hỗ trợ bản <strong>64-bit</strong></p>
-      <div class="modal-actions vertical">
-        <a id="apk64" class="modal-btn primary" target="_blank" rel="noopener">
-          <i class="bi bi-cpu-fill"></i> Tải App 64-bit
-        </a>
-        <a id="apk32" class="modal-btn secondary" target="_blank" rel="noopener" style="display:none">
-          <i class="bi bi-cpu"></i> Tải App 32-bit
-        </a>
-      </div>
-      <div class="modal-getkey-wrap">
-        <a id="apkKey" class="modal-getkey-btn" target="_blank" rel="noopener">
-          <i class="bi bi-key-fill"></i> Get Key Free
-        </a>
-      </div>
-      <button class="modal-cancel"><i class="bi bi-x"></i> Huỷ bỏ</button>
-    </div>
-  </div>
+  <!-- ========================================================================
+       GÓC PHẢI: nút bật/tắt nhạc nền
+       -> Thêm link nhạc thật của bạn vào thuộc tính src của thẻ <audio> bên
+          dưới cuối trang (id="bgMusic"). Hiện để trống nên bấm nút sẽ chưa
+          phát được gì, cần điền link mp3 trước.
+  ======================================================================== -->
+  <button class="music-btn" id="musicToggle" aria-label="Bật/tắt nhạc nền" title="Nhạc nền">
+    <i class="bi bi-music-note-beamed" id="musicIcon"></i>
+  </button>
 
-  <!-- ===== POPUP CHỌN PHIÊN BẢN iOS - giữ nguyên, app.js điều khiển ===== -->
-  <div id="iosVersionPopup" class="modal-overlay">
-    <div class="modal-box">
-      <div class="modal-icon apple"><i class="bi bi-apple"></i></div>
-      <h3>Chọn phiên bản iOS</h3>
-      <p>Chọn bản LQM bạn muốn tải về</p>
-      <div class="modal-actions">
-        <a id="iosV1" class="modal-btn primary"><i class="bi bi-lightning-fill"></i> Bản V1 – Mượt / Máy yếu</a>
-        <a id="iosV2" class="modal-btn secondary"><i class="bi bi-stars"></i> Bản V2 – CN Ngon</a>
-      </div>
-      <button class="modal-cancel"><i class="bi bi-x"></i> Huỷ bỏ</button>
+  <!-- ========================================================================
+       HERO: Logo + tên NT MOBA
+  ======================================================================== -->
+  <header class="hero">
+    <div class="hero-logo-wrap">
+      <div class="hero-logo-glow"></div>
+      <img class="hero-logo" src="https://cdn.tumadam.com/files/e8dca0d5-42f5-4d1c-9a5a-c1cad7e5b158.jpeg" alt="NT MOBA">
     </div>
-  </div>
-
-  <!-- =====================================================================
-       ĐÃ XOÁ: nút mở menu (#menuToggle), lớp phủ (#menuOverlay)
-       và thanh menu bên cạnh (<nav id="sideNav">) đã bị ẩn bằng CSS
-       ở phần <style> trên (display:none) để tránh app.js lỗi khi nó
-       cố gắng gắn sự kiện (addEventListener) vào các id này.
-       -> Nếu bạn chắc chắn app.js không đụng tới các id này, có thể
-          xoá hẳn 3 khối HTML tương ứng để code gọn hơn.
-  ===================================================================== -->
-
-  <!-- ===== HERO / PROFILE (khu giới thiệu đầu trang) ===== -->
-  <header class="hero" id="about">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <div class="avatar-wrap">
-        <div class="avatar-glow"></div>
-        <img class="hero-avatar" src="https://cdn.tumadam.com/files/e8dca0d5-42f5-4d1c-9a5a-c1cad7e5b158.jpeg" alt="NT MOBA">
-      </div>
-      <!-- ĐÃ ĐỔI: badge nhỏ trên tên -->
-      <div class="hero-badge">NT MOBA</div>
-      <h2 class="hero-sub">Hi, I am</h2>
-      <h1 class="hero-name">
-        <!-- ĐÃ ĐỔI: tên chính hiển thị to nhất -->
-        NT MOBA
-        <img class="verify-badge" src="https://i.imgur.com/McqzSg1.png" alt="✓">
-      </h1>
-      <!-- Dòng chữ chạy hiệu ứng gõ (Typed.js) - nội dung do app.js set qua id="GioiThieu" -->
-      <p class="hero-typed"><span id="GioiThieu"></span></p>
-      <div class="hero-stats">
-        <div class="stat"><strong>500M+</strong><span>Lượt tải</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><strong>2026</strong><span>Cập nhật</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><strong>#1</strong><span>iOS</span></div>
-      </div>
-    </div>
+    <h1 class="hero-name">
+      NT MOBA
+      <img class="verify" src="https://i.imgur.com/McqzSg1.png" alt="✓">
+    </h1>
+    <p class="hero-tagline">Kênh chia sẻ Mod • Game • Thủ thuật</p>
   </header>
 
-  <!-- =====================================================================
-       ===== MỚI THÊM: 3 NÚT MẠNG XÃ HỘI TRÒN (YouTube / Zalo / Telegram) =====
-       Vị trí: ngay phía trên section "Tải Game" theo yêu cầu.
-       CÁCH CẬP NHẬT LINK: chỉ cần sửa thuộc tính href="..." bên dưới.
-  ===================================================================== -->
-  <section class="social-orbit-section" aria-label="Liên kết mạng xã hội">
-    <p class="social-orbit-title">Kết nối với NT MOBA</p>
-    <div class="social-orbit-row">
-
-      <!-- Nút YouTube -->
-      <a class="social-orbit-item" href="https://youtube.com/@your-channel" target="_blank" rel="noopener">
-        <span class="social-orbit-avatar yt"><i class="bi bi-youtube"></i></span>
-        <span class="social-orbit-label">YouTube</span>
-      </a>
-
-      <!-- Nút Zalo -->
-      <a class="social-orbit-item" href="https://zalo.me/your-id" target="_blank" rel="noopener">
-        <span class="social-orbit-avatar zalo"><i class="bi bi-chat-dots-fill"></i></span>
-        <span class="social-orbit-label">Zalo</span>
-      </a>
-
-      <!-- Nút Telegram -->
-      <a class="social-orbit-item" href="https://t.me/your-channel" target="_blank" rel="noopener">
-        <span class="social-orbit-avatar tg"><i class="bi bi-telegram"></i></span>
-        <span class="social-orbit-label">Telegram</span>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ===== GAME DOWNLOAD (danh sách game mod - render bởi app.js) ===== -->
-  <section class="content-section" id="games">
-    <div class="section-label"><i class="bi bi-controller"></i> Tải Game</div>
-    <h2 class="section-title">Game Mods</h2>
-    <div class="game-grid" id="gameGrid">
-      <!-- Rendered by JS -->
-    </div>
-  </section>
-
-  <!-- ===== GET KEY (danh sách lấy key - render bởi app.js) ===== -->
-  <section class="content-section alt" id="getkey">
-    <div class="section-label"><i class="bi bi-key-fill"></i> Get Key</div>
-    <h2 class="section-title">Lấy Key LQM</h2>
-    <div class="key-grid" id="keyGrid">
-      <!-- Rendered by JS -->
-    </div>
-  </section>
-
-  <!-- ===== MOD FILES (render bởi app.js) ===== -->
-  <section class="content-section" id="modfiles">
-    <div class="section-label"><i class="bi bi-file-zip-fill"></i> Mod Files</div>
-    <h2 class="section-title">File Mod</h2>
-    <div class="mod-grid" id="modGrid">
-      <!-- Rendered by JS -->
-    </div>
-  </section>
-
-  <!-- ===== VIDEO GUIDE (render bởi app.js) ===== -->
-  <section class="content-section alt" id="videos">
-    <div class="section-label"><i class="bi bi-play-circle-fill"></i> Hướng dẫn</div>
-    <h2 class="section-title">Video Mod</h2>
-    <div class="vid-grid" id="vidGrid">
-      <!-- Rendered by JS -->
-    </div>
-  </section>
-
-  <!-- Các modal bên dưới (lưu ý, chọn dòng máy, hướng dẫn, video) đều được
-       app.js gọi ra khi người dùng bấm vào các nút trong gameGrid/modGrid...
-       -> Giữ nguyên, không xoá. -->
-
-  <!-- ===== NOTE MODAL (lưu ý trước khi tải/xem) ===== -->
-  <div id="noteModal" class="modal-overlay">
-    <div class="modal-box guide-modal-box">
-      <div class="img-preview-header">
-        <div class="img-preview-title" id="noteModalTitle">Lưu ý</div>
-        <button class="img-preview-close" id="noteModalClose"><i class="bi bi-x-lg"></i></button>
-      </div>
-      <div class="guide-modal-body" id="noteModalBody"></div>
-    </div>
-  </div>
-
-  <!-- ===== DEVICE MODAL (chọn máy mạnh/yếu) ===== -->
-  <div id="deviceModal" class="modal-overlay">
-    <div class="modal-box">
-      <div class="modal-icon apple"><i class="bi bi-apple"></i></div>
-      <h3>Chọn theo dòng máy</h3>
-      <p>Chọn đúng bản phù hợp với iPhone của bạn</p>
-      <div class="modal-actions vertical">
-        <button id="deviceStrong" class="modal-btn primary">
-          <i class="bi bi-phone-fill"></i>
-          <div class="device-btn-text">
-            <span>📱 Máy Mạnh</span>
-            <small>iPhone XS, XS Max, 11, 12, 13, 14, 15... trở lên</small>
-          </div>
-        </button>
-        <button id="deviceWeak" class="modal-btn secondary">
-          <i class="bi bi-phone"></i>
-          <div class="device-btn-text">
-            <span>📱 Máy Yếu</span>
-            <small>iPhone X, 8, 8 Plus, 7, 7 Plus... trở xuống</small>
-          </div>
-        </button>
-      </div>
-      <button class="modal-cancel" id="deviceModalClose"><i class="bi bi-x"></i> Huỷ bỏ</button>
-    </div>
-  </div>
-
-  <!-- ===== GUIDE MODAL (hướng dẫn chi tiết dạng chữ/ảnh) ===== -->
-  <div id="guideModal" class="modal-overlay">
-    <div class="modal-box guide-modal-box">
-      <div class="img-preview-header">
-        <div class="img-preview-title" id="guideModalTitle">Hướng dẫn</div>
-        <button class="img-preview-close" id="guideModalClose"><i class="bi bi-x-lg"></i></button>
-      </div>
-      <div class="guide-modal-body" id="guideModalBody"></div>
-    </div>
-  </div>
-
-  <!-- ===== VIDEO MODAL (phát video hướng dẫn) ===== -->
-  <div id="videoModal" class="modal-overlay">
-    <div class="modal-box video-modal-box">
-      <div class="img-preview-header">
-        <div class="img-preview-title" id="videoModalTitle">Video</div>
-        <button class="img-preview-close" id="videoModalClose"><i class="bi bi-x-lg"></i></button>
-      </div>
-      <div class="video-container">
-        <!-- Player injected dynamically by JS based on video type -->
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== HELP SECTION (2 thẻ: Giới thiệu / FAQ) =====
-       Lưu ý: href="/" và "https://yourdomain.com/faq" đang là placeholder,
-       nhớ đổi sang link thật của bạn. -->
-  <section class="help-section">
-    <a href="/" class="help-card" target="_blank">
-      <img src="https://i.imgur.com/osKfZa6.png" class="help-img" alt="Blog">
-      <span>Giới thiệu tôi?</span>
+  <!-- ========================================================================
+       3 NÚT MẠNG XÃ HỘI (YouTube / Zalo / Telegram)
+       Cập nhật link: chỉ cần sửa href bên dưới.
+  ======================================================================== -->
+  <section class="social-row" aria-label="Mạng xã hội">
+    <a class="social-item" href="https://youtube.com/@your-channel" target="_blank" rel="noopener">
+      <span class="social-avatar yt"><i class="bi bi-youtube"></i></span>
+      <span class="social-label">YouTube</span>
     </a>
-    <a href="https://yourdomain.com/faq" class="help-card" target="_blank">
-      <img src="https://i.imgur.com/IL4Z54N.png" class="help-img" alt="FAQ">
-      <span>Hỏi đáp & Lỗi?</span>
+    <a class="social-item" href="https://zalo.me/your-id" target="_blank" rel="noopener">
+      <span class="social-avatar zalo"><i class="bi bi-chat-dots-fill"></i></span>
+      <span class="social-label">Zalo</span>
+    </a>
+    <a class="social-item" href="https://t.me/your-channel" target="_blank" rel="noopener">
+      <span class="social-avatar tg"><i class="bi bi-telegram"></i></span>
+      <span class="social-label">Telegram</span>
     </a>
   </section>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- ========================================================================
+       DANH MỤC ĐIỀU HƯỚNG
+       -> Đây là vài mục mẫu (Tải Game / Get Key / File Mod / Hướng Dẫn /
+          Liên Hệ). Copy nguyên khối <a class="nav-card">...</a> bên dưới rồi
+          đổi icon (class "bi-..." từ https://icons.getbootstrap.com), tiêu
+          đề, mô tả và href để thêm mục mới.
+  ======================================================================== -->
+  <section class="nav-section">
+    <div class="nav-grid" id="navGrid">
+
+      <a class="nav-card" href="#">
+        <span class="nav-icon"><i class="bi bi-controller"></i></span>
+        <span class="nav-text">
+          <p class="nav-title">Tải Game</p>
+          <p class="nav-sub">Danh sách game mod mới nhất</p>
+        </span>
+        <i class="bi bi-chevron-right nav-arrow"></i>
+      </a>
+
+      <a class="nav-card" href="#">
+        <span class="nav-icon"><i class="bi bi-key-fill"></i></span>
+        <span class="nav-text">
+          <p class="nav-title">Get Key</p>
+          <p class="nav-sub">Lấy key kích hoạt miễn phí</p>
+        </span>
+        <i class="bi bi-chevron-right nav-arrow"></i>
+      </a>
+
+      <a class="nav-card" href="#">
+        <span class="nav-icon"><i class="bi bi-file-zip-fill"></i></span>
+        <span class="nav-text">
+          <p class="nav-title">File Mod</p>
+          <p class="nav-sub">Tải file mod / plugin</p>
+        </span>
+        <i class="bi bi-chevron-right nav-arrow"></i>
+      </a>
+
+      <a class="nav-card" href="#">
+        <span class="nav-icon"><i class="bi bi-play-circle-fill"></i></span>
+        <span class="nav-text">
+          <p class="nav-title">Video Hướng Dẫn</p>
+          <p class="nav-sub">Xem hướng dẫn cài đặt chi tiết</p>
+        </span>
+        <i class="bi bi-chevron-right nav-arrow"></i>
+      </a>
+
+      <a class="nav-card" href="#">
+        <span class="nav-icon"><i class="bi bi-chat-heart-fill"></i></span>
+        <span class="nav-text">
+          <p class="nav-title">Liên Hệ</p>
+          <p class="nav-sub">Hỗ trợ / báo lỗi</p>
+        </span>
+        <i class="bi bi-chevron-right nav-arrow"></i>
+      </a>
+
+      <!-- Thêm mục mới bằng cách copy 1 khối <a class="nav-card"> ở trên xuống đây -->
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       FOOTER
+  ======================================================================== -->
   <footer class="footer">
-    <div class="footer-inner">
-      <!-- ĐÃ XOÁ: thẻ <img class="footer-avatar" src=""> vì src rỗng, là code dư không hiển thị gì -->
-      <!-- ĐÃ ĐỔI: tên thương hiệu trong footer -->
-      <p>© 2026 <strong>NT MOBA</strong></p>
-      <p class="footer-sub">Made with ❤️ in Việt Nam</p>
-    </div>
+    <p>© 2026 <strong>NT MOBA</strong> · Made with ❤️ in Việt Nam</p>
   </footer>
 
-  <!-- =====================================================================
-       ĐÃ XOÁ HẲN: nút Chat nổi (#chatFab) và khung Chatbot (#chatWidget)
-       theo yêu cầu "loại bỏ botchat". Nếu app.js có gọi tới 2 id này,
-       hãy gỡ script liên quan trong app.js hoặc để lại (đã ẩn bằng CSS ở trên).
-  ===================================================================== -->
+  <!-- Thẻ audio dùng cho nhạc nền -->
+  <!-- Điền link mp3 vào src="" bên dưới để kích hoạt nhạc -->
+  <audio id="bgMusic" loop preload="none" src=""></audio>
 
-  <!-- Thẻ audio dùng cho nhạc nền (nếu app.js có bật/tắt nhạc) - giữ nguyên vì chưa rõ app.js có dùng không -->
-  <audio id="bgMusic" preload="auto"></audio>
-
-  <!-- File JS chính, chứa toàn bộ logic render Game/Key/Mod/Video, mở modal, gõ chữ Typed.js... -->
-  <script src="app.js"></script>
-
-  <!-- Fix màn hình đen khi iOS Safari restore từ BFCache -->
+  <!-- ========================================================================
+       JAVASCRIPT — TOÀN BỘ LOGIC TRANG
+  ======================================================================== -->
   <script>
-  (function() {
-    // Fix 1: pageshow fires khi restore từ BFCache (back/forward cache)
-    // persisted = true nghĩa là trang được restore từ cache → reload
-    window.addEventListener('pageshow', function(e) {
-      if (e.persisted) {
-        window.location.reload();
-      }
-    });
+  (function () {
+    'use strict';
 
-    // Fix 2: visibilitychange — khi user quay lại tab/app sau khi bị ẩn
-    // Nếu splash vẫn còn trên DOM → xoá ngay lập tức
-    document.addEventListener('visibilitychange', function() {
-      if (document.visibilityState === 'visible') {
-        var splash = document.getElementById('introSplash');
-        if (splash) {
-          splash.style.transition = 'none';
-          splash.style.opacity = '0';
-          splash.style.visibility = 'hidden';
-          splash.style.pointerEvents = 'none';
-          setTimeout(function() { if (splash.parentNode) splash.parentNode.removeChild(splash); }, 100);
-        }
-        document.body.classList.remove('loading');
-      }
-    });
-
-    // Fix 3: Fallback — nếu sau 5 giây splash vẫn còn → xoá
-    setTimeout(function() {
-      var splash = document.getElementById('introSplash');
-      if (splash) {
-        splash.style.opacity = '0';
-        splash.style.visibility = 'hidden';
-        setTimeout(function() { if (splash.parentNode) splash.parentNode.removeChild(splash); }, 300);
-      }
+    /* ---------------------------------------------------------------------
+       1) SPLASH SCREEN: ẩn sau khi trang load xong (tối thiểu 900ms để
+          không bị chớp quá nhanh, tối đa 4s phòng trường hợp mạng chậm)
+    --------------------------------------------------------------------- */
+    var splash = document.getElementById('splash');
+    function hideSplash () {
+      if (!splash) return;
+      splash.classList.add('hide');
       document.body.classList.remove('loading');
-    }, 5000);
+      setTimeout(function () {
+        if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+      }, 600);
+    }
+    var minTimer = setTimeout(function () {
+      if (document.readyState === 'complete') hideSplash();
+    }, 900);
+    window.addEventListener('load', function () {
+      clearTimeout(minTimer);
+      setTimeout(hideSplash, 400); // giữ thêm chút cho mượt
+    });
+    setTimeout(hideSplash, 4000); // fallback an toàn
+
+    // Fix màn hình đen khi Safari iOS restore trang từ BFCache
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) window.location.reload();
+    });
+
+    /* ---------------------------------------------------------------------
+       2) ĐỒNG HỒ THỜI GIAN THỰC (góc trái)
+    --------------------------------------------------------------------- */
+    var clockEl = document.getElementById('clockTime');
+    function pad (n) { return n < 10 ? '0' + n : '' + n; }
+    function updateClock () {
+      var d = new Date();
+      clockEl.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    /* ---------------------------------------------------------------------
+       3) NÚT SÁNG / TỐI (Dark - Light Mode)
+          Ghi nhớ lựa chọn qua localStorage để lần sau vào vẫn giữ theme cũ.
+    --------------------------------------------------------------------- */
+    var htmlEl = document.documentElement;
+    var themeBtn = document.getElementById('themeToggle');
+    var themeIcon = document.getElementById('themeIcon');
+
+    function applyTheme (theme) {
+      htmlEl.setAttribute('data-theme', theme);
+      themeIcon.className = theme === 'dark' ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
+      try { localStorage.setItem('nt_moba_theme', theme); } catch (e) {}
+    }
+
+    (function initTheme () {
+      var saved = null;
+      try { saved = localStorage.getItem('nt_moba_theme'); } catch (e) {}
+      if (saved === 'dark' || saved === 'light') {
+        applyTheme(saved);
+      } else {
+        // Nếu chưa lưu gì -> theo cài đặt hệ điều hành của người dùng
+        var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        applyTheme(prefersLight ? 'light' : 'dark');
+      }
+    })();
+
+    themeBtn.addEventListener('click', function () {
+      var current = htmlEl.getAttribute('data-theme');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    /* ---------------------------------------------------------------------
+       4) NÚT BẬT/TẮT NHẠC NỀN (góc phải)
+          - Trình duyệt chặn tự động phát có tiếng nên nhạc chỉ phát khi
+            người dùng chủ động bấm nút (đúng chuẩn, không bị chặn).
+          - Nhớ điền link mp3 vào thẻ <audio id="bgMusic" src="..."> ở trên.
+    --------------------------------------------------------------------- */
+    var musicBtn = document.getElementById('musicToggle');
+    var musicIcon = document.getElementById('musicIcon');
+    var bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.5; // âm lượng mặc định 50%, chỉnh số từ 0 -> 1 nếu muốn
+
+    musicBtn.addEventListener('click', function () {
+      if (!bgMusic.src) {
+        alert('Chưa có link nhạc. Hãy điền src cho thẻ <audio id="bgMusic"> trong file HTML.');
+        return;
+      }
+      if (bgMusic.paused) {
+        bgMusic.play().then(function () {
+          musicBtn.classList.add('playing');
+          musicIcon.className = 'bi bi-pause-fill';
+        }).catch(function () {
+          alert('Không thể phát nhạc (trình duyệt chặn hoặc link nhạc lỗi).');
+        });
+      } else {
+        bgMusic.pause();
+        musicBtn.classList.remove('playing');
+        musicIcon.className = 'bi bi-music-note-beamed';
+      }
+    });
+
+    /* ---------------------------------------------------------------------
+       5) DANH MỤC ĐIỀU HƯỚNG: hiệu ứng nổi khối đã xử lý bằng CSS
+          (:hover / :active). Nếu muốn xử lý điều hướng bằng JS (VD mở
+          modal thay vì đổi trang), thêm code ở đây, ví dụ:
+
+          document.querySelectorAll('.nav-card').forEach(function (card) {
+            card.addEventListener('click', function (e) {
+              // e.preventDefault();
+              // mở modal / xử lý riêng cho từng mục tại đây
+            });
+          });
+    --------------------------------------------------------------------- */
+
   })();
   </script>
-
-  <!-- =====================================================================
-       ĐÃ XOÁ: script quảng cáo (effectivecpmnetwork.com) theo yêu cầu
-       "xóa quảng cáo". Đây là đoạn tự chèn 1 script quảng cáo sau khi
-       trang load 1.5s, không liên quan tới chức năng chính nên xoá an toàn.
-  ===================================================================== -->
 
 </body>
 </html>
